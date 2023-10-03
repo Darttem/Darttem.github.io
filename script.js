@@ -1,76 +1,61 @@
-const canvas = document.getElementById('gameCanvas');
-const context = canvas.getContext('2d');
-
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 const boxSize = 20;
-const canvasSize = canvas.width;
-const boxesInRow = canvasSize / boxSize;
-
-let snake = [];
-snake[0] = { x: 10 * boxSize, y: 10 * boxSize };
-
-let food = {
-    x: Math.floor(Math.random() * boxesInRow) * boxSize,
-    y: Math.floor(Math.random() * boxesInRow) * boxSize
-};
-
-let score = 0;
-
+let speed = 100;
+let snake;
+let food;
 let d;
-document.addEventListener("keydown", direction);
+let snakeColor = '#FF0000';
 
-let snakeColor = 'green'; // За замовчуванням
+document.addEventListener("keydown", getDirection);
 
-function startGameWithSelection() {
-    snakeColor = document.getElementById('snakeColorSelect').value;
-    document.getElementById('snakeSelectionModal').style.display = 'none';
-    restartGame();
-}
-
-
-
-// Змінюємо кольор змійки в функції draw
-for (let i = 0; i < snake.length; i++) {
-    context.fillStyle = (i == 0) ? snakeColor : 'white'; // Використовуємо вибраний колір для голови змійки
-    context.fillRect(snake[i].x, snake[i].y, boxSize, boxSize);
-    context.strokeStyle = 'black';
-    context.strokeRect(snake[i].x, snake[i].y, boxSize, boxSize);
-}
-
-function direction(event) {
+function getDirection(event) {
     if (event.keyCode == 37 && d != "RIGHT") d = "LEFT";
     if (event.keyCode == 38 && d != "DOWN") d = "UP";
     if (event.keyCode == 39 && d != "LEFT") d = "RIGHT";
     if (event.keyCode == 40 && d != "UP") d = "DOWN";
 }
 
+function createSnake() {
+    snake = [];
+    for (let i = 3; i >= 0; i--) {
+        snake.push({ x: i, y: 0 });
+    }
+}
+
+function createFood() {
+    food = {
+        x: Math.floor(Math.random() * (canvas.width / boxSize - 2) + 1),
+        y: Math.floor(Math.random() * (canvas.height / boxSize - 2) + 1)
+    };
+}
+
 function draw() {
-    context.clearRect(0, 0, canvasSize, canvasSize);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     for (let i = 0; i < snake.length; i++) {
-        context.fillStyle = (i == 0) ? "green" : "white";
-        context.fillRect(snake[i].x, snake[i].y, boxSize, boxSize);
-
-        context.strokeStyle = "black";
-        context.strokeRect(snake[i].x, snake[i].y, boxSize, boxSize);
+        ctx.fillStyle = snakeColor;
+        ctx.fillRect(snake[i].x * boxSize, snake[i].y * boxSize, boxSize, boxSize);
     }
 
-    context.fillStyle = "red";
-    context.fillRect(food.x, food.y, boxSize, boxSize);
+    ctx.fillStyle = 'red';
+    ctx.fillRect(food.x * boxSize, food.y * boxSize, boxSize, boxSize);
 
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
 
-    if (d == "LEFT") snakeX -= boxSize;
-    if (d == "UP") snakeY -= boxSize;
-    if (d == "RIGHT") snakeX += boxSize;
-    if (d == "DOWN") snakeY += boxSize;
+    if (d == "LEFT") snakeX--;
+    if (d == "UP") snakeY--;
+    if (d == "RIGHT") snakeX++;
+    if (d == "DOWN") snakeY++;
+
+    if (snakeX < 0) snakeX = canvas.width / boxSize - 1;
+    if (snakeX >= canvas.width / boxSize) snakeX = 0;
+    if (snakeY < 0) snakeY = canvas.height / boxSize - 1;
+    if (snakeY >= canvas.height / boxSize) snakeY = 0;
 
     if (snakeX == food.x && snakeY == food.y) {
-        score++;
-        food = {
-            x: Math.floor(Math.random() * boxesInRow) * boxSize,
-            y: Math.floor(Math.random() * boxesInRow) * boxSize
-        };
+        createFood();
     } else {
         snake.pop();
     }
@@ -80,42 +65,38 @@ function draw() {
         y: snakeY
     };
 
-    function collision(newHead, array) {
+    function collision(head, array) {
         for (let i = 0; i < array.length; i++) {
-            if (newHead.x == array[i].x && newHead.y == array[i].y) return true;
+            if (head.x == array[i].x && head.y == array[i].y) return true;
         }
         return false;
     }
 
-    if (snakeX < 0 || snakeY < 0 || snakeX >= canvasSize || snakeY >= canvasSize || collision(newHead, snake)) {
-        clearInterval(game);
+    if (collision(newHead, snake)) {
+        restartGame();
     }
 
     snake.unshift(newHead);
-
-    context.fillStyle = "black";
-    context.font = "20px Arial";
-    context.fillText("Score: " + score, boxSize, boxSize);
 }
 
+setInterval(draw, speed);
 
-
-
-// Додаємо функцію для рестарту гри
 function restartGame() {
-    clearInterval(game);
     snake = [];
-    snake[0] = { x: 10 * boxSize, y: 10 * boxSize };
-    score = 0;
-    d = undefined; // Обнулення напрямку
-    game = setInterval(draw, document.getElementById('speedSelect').value);
+    createSnake();
+    createFood();
+    d = undefined;
+    speed = 100;
+    document.getElementById('speedRange').value = 100;
 }
 
-// Змінюємо інтервал гри на основі вибраної швидкості
-document.getElementById('speedSelect').addEventListener('change', function() {
-    clearInterval(game);
-    game = setInterval(draw, document.getElementById('speedSelect').value);
-});
+function changeSpeed(newSpeed) {
+    speed = 300 - newSpeed;
+}
 
-// Ініціалізація гри з вибраною швидкістю
-let game = setInterval(draw, document.getElementById('speedSelect').value);
+function changeColor(color) {
+    snakeColor = color;
+}
+
+createSnake();
+createFood();
