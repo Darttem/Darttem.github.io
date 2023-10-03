@@ -1,61 +1,73 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #0099cc; /* синій */
+    font-family: 'Arial', sans-serif;
+    background-color: #4CAF50;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    color: #ff0000; /* червоний */
+    overflow: hidden;
+    margin: 0;
+    color: #fff;
 }
-#game {
-    background-color: #ffcc00; /* жовтий */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+.container {
+    text-align: center;
 }
-#gameCanvas {
-    border: 20px solid #333;
-    background-color: #e9e9e9;
-    margin: 20px 0;
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
 }
-#controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
+
+canvas {
+    border: 4px solid #333;
+    background-color: #fff;
 }
+
+.controls {
+    margin-top: 20px;
+}
+
 button {
-    padding: 8px 12px;
-    background-color: #ff0000; /* червоний */
-    color: #0099cc; /* синій */
+    padding: 10px 20px;
+    margin: 5px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
+    background-color: #333;
+    color: #fff;
     transition: background-color 0.3s;
 }
+
 button:hover {
-    background-color: #d90000;
+    background-color: #555;
 }
 
-#mobile-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
+.mobile-controls {
+    display: grid;
+    grid-template-areas:
+        'a w d'
+        ' . s . ';
+    gap: 10px;
+    margin-top: 20px;
 }
 
-#mobile-controls .row {
-    display: flex;
-    justify-content: center;
-    width: 100px;
+.mobile-controls button {
+    width: 40px;
+    height: 40px;
 }
 
-#mobile-controls button {
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
-    margin: 5px;
+.mobile-controls button:nth-child(1) {
+    grid-area: w;
 }
 
+.mobile-controls button:nth-child(2) {
+    grid-area: a;
+}
+
+.mobile-controls button:nth-child(3) {
+    grid-area: s;
+}
+
+.mobile-controls button:nth-child(4) {
+    grid-area: d;
+}

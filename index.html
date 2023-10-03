@@ -1,48 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3868937912837143"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
-    <title>Snake Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <title>Змійка</title>
 </head>
+
 <body>
-<div id="game">
-    <h2>Змійка</h2>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div id="controls">
-        <button onclick="restartGame()">Рестарт</button>
-        <label for="speedRange">Швидкість:</label>
-        <input type="range" id="speedRange" min="50" max="300" step="50" value="100" onchange="changeSpeed(this.value)">
-        <div id="colorOptions">
-            <label>Колір: </label>
-            <button onclick="changeColor('#FF0000')">Червоний</button>
-            <button onclick="changeColor('#00FF00')">Зелений</button>
-            <button onclick="changeColor('#0000FF')">Синій</button>
+    <div class="container">
+        <h1>Змійка</h1>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+        <div class="controls">
+            <button onclick="restart()">Рестарт</button>
+            <label>Швидкість: <input type="range" id="speedRange" min="1" max="10" value="5"></label>
+            <span>Колір:</span>
+            <button onclick="changeSnakeColor('red')">Червоний</button>
+            <button onclick="changeSnakeColor('green')">Зелений</button>
+            <button onclick="changeSnakeColor('blue')">Синій</button>
+        </div>
+
+        <div class="mobile-controls">
+            <button onclick="setDirection('UP')">W</button>
+            <button onclick="setDirection('LEFT')">A</button>
+            <button onclick="setDirection('DOWN')">S</button>
+            <button onclick="setDirection('RIGHT')">D</button>
         </div>
     </div>
-</div>
-
-<div id="mobile-controls">
-    <div class="row">
-        <span></span>
-        <button onclick="setDirection('UP')">W</button>
-        <span></span>
-    </div>
-    <div class="row">
-        <button onclick="setDirection('LEFT')">A</button>
-        <span></span>
-        <button onclick="setDirection('RIGHT')">D</button>
-    </div>
-    <div class="row">
-        <span></span>
-        <button onclick="setDirection('DOWN')">S</button>
-        <span></span>
-    </div>
-</div>
-
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>

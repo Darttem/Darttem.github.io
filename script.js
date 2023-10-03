@@ -1,130 +1,154 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-const boxSize = 20;
-let speed = 100;
-let snake;
-let food;
-let d;
-let snakeColor = '#FF0000';
-let gameInterval;
+let canvas = document.getElementById("gameCanvas");
+let ctx = canvas.getContext("2d");
 
-document.addEventListener("keydown", getDirection);
+let tileSize = 20;
+let tileCount = canvas.width / tileSize;
+let headX = tileCount / 2;
+let headY = tileCount / 2;
+let xVelocity = 0;
+let yVelocity = 0;
+let trail = [];
+let tailLength = 5;
+let appleX = Math.floor(Math.random() * tileCount);
+let appleY = Math.floor(Math.random() * tileCount);
+let snakeColor = "green";
+let score = 0;
 
-document.addEventListener("keydown", getDirection);
-
-function getDirection(event) {
-    if (event.key === 'a' && d != "RIGHT") d = "LEFT";
-    if (event.key === 'w' && d != "DOWN") d = "UP";
-    if (event.key === 'd' && d != "LEFT") d = "RIGHT";
-    if (event.key === 's' && d != "UP") d = "DOWN";
-}
-function setDirection(direction) {
-    if ((direction == "LEFT" && d != "RIGHT") || 
-        (direction == "UP" && d != "DOWN") ||
-        (direction == "RIGHT" && d != "LEFT") ||
-        (direction == "DOWN" && d != "UP")) {
-        d = direction;
+document.addEventListener("keydown", function (event) {
+    switch (event.key.toLowerCase()) {
+        case "a":
+            if (xVelocity == 0) {
+                xVelocity = -1;
+                yVelocity = 0;
+            }
+            break;
+        case "w":
+            if (yVelocity == 0) {
+                xVelocity = 0;
+                yVelocity = -1;
+            }
+            break;
+        case "d":
+            if (xVelocity == 0) {
+                xVelocity = 1;
+                yVelocity = 0;
+            }
+            break;
+        case "s":
+            if (yVelocity == 0) {
+                xVelocity = 0;
+                yVelocity = 1;
+            }
+            break;
     }
-}
+});
 
 
 
-function createSnake() {
-    snake = [];
-    for (let i = 3; i >= 0; i--) {
-        snake.push({ x: i, y: 0 });
+
+function gameLoop() {
+    headX += xVelocity;
+    headY += yVelocity;
+
+    if (headX < 0) {
+        headX = tileCount - 1;
     }
-}
-
-function createFood() {
-    food = {
-        x: Math.floor(Math.random() * (canvas.width / boxSize - 2) + 1),
-        y: Math.floor(Math.random() * (canvas.height / boxSize - 2) + 1)
-    };
-}
-
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Додаємо контури карти
-    ctx.fillStyle = '#333'; // Колір стін
-    ctx.fillRect(0, 0, canvas.width, boxSize);
-    ctx.fillRect(0, canvas.height - boxSize, canvas.width, boxSize);
-    ctx.fillRect(0, 0, boxSize, canvas.height);
-    ctx.fillRect(canvas.width - boxSize, 0, boxSize, canvas.height);
-
-    for (let i = 0; i < snake.length; i++) {
-        ctx.fillStyle = snakeColor;
-        ctx.fillRect(snake[i].x * boxSize, snake[i].y * boxSize, boxSize, boxSize);
+    if (headX > tileCount - 1) {
+        headX = 0;
     }
-
-    ctx.fillStyle = 'red';
-    ctx.fillRect(food.x * boxSize, food.y * boxSize, boxSize, boxSize);
-
-    let snakeX = snake[0].x;
-    let snakeY = snake[0].y;
-
-    if (d == "LEFT") snakeX--;
-    if (d == "UP") snakeY--;
-    if (d == "RIGHT") snakeX++;
-    if (d == "DOWN") snakeY++;
-
-    if (snakeX < 0) snakeX = canvas.width / boxSize - 1;
-    if (snakeX >= canvas.width / boxSize) snakeX = 0;
-    if (snakeY < 0) snakeY = canvas.height / boxSize - 1;
-    if (snakeY >= canvas.height / boxSize) snakeY = 0;
-
-    if (snakeX == food.x && snakeY == food.y) {
-        createFood();
-    } else {
-        snake.pop();
+    if (headY < 0) {
+        headY = tileCount - 1;
+    }
+    if (headY > tileCount - 1) {
+        headY = 0;
     }
 
-    let newHead = {
-        x: snakeX,
-        y: snakeY
-    };
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    function collision(head, array) {
-        for (let i = 0; i < array.length; i++) {
-            if (head.x == array[i].x && head.y == array[i].y) return true;
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+
+    ctx.fillStyle = snakeColor;
+    for (let i = 0; i < trail.length; i++) {
+        ctx.fillRect(trail[i].x * tileSize, trail[i].y * tileSize, tileSize, tileSize);
+        ctx.strokeRect(trail[i].x * tileSize, trail[i].y * tileSize, tileSize, tileSize);
+
+        if (trail[i].x === headX && trail[i].y === headY && tailLength > 5) {
+            tailLength = 5;
+            score = 0;
         }
-        return false;
     }
 
-    if (collision(newHead, snake)) {
-        restartGame();
+    trail.push({ x: headX, y: headY });
+
+    while (trail.length > tailLength) {
+        trail.shift();
     }
 
-    snake.unshift(newHead);
-}
-
-function startGame() {
-    if (gameInterval) {
-        clearInterval(gameInterval);
+    if (appleX === headX && appleY === headY) {
+        tailLength++;
+        score++;
+        appleX = Math.floor(Math.random() * tileCount);
+        appleY = Math.floor(Math.random() * tileCount);
     }
-    gameInterval = setInterval(draw, speed);
+
+    ctx.fillStyle = "red";
+    ctx.fillRect(appleX * tileSize, appleY * tileSize, tileSize, tileSize);
+    ctx.strokeRect(appleX * tileSize, appleY * tileSize, tileSize, tileSize);
+
+    ctx.fillStyle = "black";
+    ctx.fillText("Score: " + score, 10, 10);
+
+    setTimeout(gameLoop, 1000 / 10);
 }
 
-function changeSpeed(newSpeed) {
-    speed = 300 - newSpeed;
-    startGame();
+gameLoop();
+
+function restart() {
+    headX = tileCount / 2;
+    headY = tileCount / 2;
+    xVelocity = 0;
+    yVelocity = 0;
+    trail = [];
+    tailLength = 5;
+    score = 0;
 }
 
-function changeColor(color) {
+function setDirection(direction) {
+    switch (direction) {
+        case "LEFT":
+            if (xVelocity == 0) {
+                xVelocity = -1;
+                yVelocity = 0;
+            }
+            break;
+        case "UP":
+            if (yVelocity == 0) {
+                xVelocity = 0;
+                yVelocity = -1;
+            }
+            break;
+        case "RIGHT":
+            if (xVelocity == 0) {
+                xVelocity = 1;
+                yVelocity = 0;
+            }
+            break;
+        case "DOWN":
+            if (yVelocity == 0) {
+                xVelocity = 0;
+                yVelocity = 1;
+            }
+            break;
+    }
+}
+
+function changeSnakeColor(color) {
     snakeColor = color;
 }
 
-function restartGame() {
-    snake = [];
-    createSnake();
-    createFood();
-    d = undefined;
-    speed = 100;
-    document.getElementById('speedRange').value = 100;
-    startGame();
-}
-
-createSnake();
-createFood();
-startGame();
+document.getElementById("speedRange").onchange = function () {
+    let speed = this.value;
+    gameSpeed = 1000 / speed;
+};
