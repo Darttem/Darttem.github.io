@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Snake Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #game {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #gameCanvas {
+            border: 20px solid #333;
+            background-color: #e9e9e9;
+            margin: 20px 0;
+        }
+        #controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        button {
+            padding: 8px 12px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+<div id="game">
+    <h2>Змійка</h2>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="controls">
+        <button onclick="restartGame()">Рестарт</button>
+        <label for="speedRange">Швидкість:</label>
+        <input type="range" id="speedRange" min="50" max="300" step="50" value="100" onchange="changeSpeed(this.value)">
+        <div id="colorOptions">
+            <label>Колір: </label>
+            <button onclick="changeColor('#FF0000')">Червоний</button>
+            <button onclick="changeColor('#00FF00')">Зелений</button>
+            <button onclick="changeColor('#0000FF')">Синій</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const boxSize = 20;
+    let speed = 100;
+    let snake;
+    let food;
+    let d;
+    let snakeColor = '#FF0000';
+
+    document.addEventListener("keydown", getDirection);
+
+    function getDirection(event) {
+        if (event.keyCode == 37 && d != "RIGHT") d = "LEFT";
+        if (event.keyCode == 38 && d != "DOWN") d = "UP";
+        if (event.keyCode == 39 && d != "LEFT") d = "RIGHT";
+        if (event.keyCode == 40 && d != "UP") d = "DOWN";
+    }
+
+    function createSnake() {
+        snake = [];
+        for (let i = 3; i >= 0; i--) {
+            snake.push({ x: i, y: 0 });
+        }
+    }
+
+    function createFood() {
+        food = {
+            x: Math.floor(Math.random() * (canvas.width / boxSize)),
+            y: Math.floor(Math.random() * (canvas.height / boxSize))
+        };
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < snake.length; i++) {
+            ctx.fillStyle = snakeColor;
+            ctx.fillRect(snake[i].x * boxSize, snake[i].y * boxSize, boxSize, boxSize);
+        }
+
+        ctx.fillStyle = 'red';
+        ctx.fillRect(food.x * boxSize, food.y * boxSize, boxSize, boxSize);
+
+        let snakeX = snake[0].x;
+        let snakeY = snake[0].y;
+
+        if (d == "LEFT") snakeX--;
+        if (d == "UP") snakeY--;
+        if (d == "RIGHT") snakeX++;
+        if (d == "DOWN") snakeY++;
+
+        if (snakeX == food.x && snakeY == food.y) {
+            createFood();
+        } else {
+            snake.pop();
+        }
+
+        let newHead = {
+            x: snakeX,
+            y: snakeY
+        };
+
+        snake.unshift(newHead);
+
+        // Рисуємо стіни
+        for (let i = 0; i <= canvas.width / boxSize; i++) {
+            ctx.fillStyle = "#333";
+            ctx.fillRect(i * boxSize, 0, boxSize, boxSize); // верхня стіна
+            ctx.fillRect(i * boxSize, canvas.height - boxSize, boxSize, boxSize); // нижня стіна
+        }
+        for (let i = 0; i <= canvas.height / boxSize; i++) {
+            ctx.fillStyle = "#333";
+            ctx.fillRect(0, i * boxSize, boxSize, boxSize); // ліва стіна
+            ctx.fillRect(canvas.width - boxSize, i * boxSize, boxSize, boxSize); // права стіна
+        }
+
+        // Перевірка на зіткнення зі стіною
+        if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width / boxSize || snakeY >= canvas.height / boxSize) {
+            restartGame();
+        }
+    }
+
+    setInterval(draw, speed);
+
+    function restartGame() {
+        snake = [];
+        createSnake();
+        createFood();
+        d = undefined;
+        speed = 100;
+        document.getElementById('speedRange').value = 100;
+    }
+
+    function changeSpeed(newSpeed) {
+        speed = 300 - newSpeed;
+    }
+
+    function changeColor(color) {
+        snakeColor = color;
+    }
+
+    createSnake();
+    createFood();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
