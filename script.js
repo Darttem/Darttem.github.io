@@ -6,15 +6,28 @@ let snake;
 let food;
 let d;
 let snakeColor = '#FF0000';
+let gameInterval;
+
+document.addEventListener("keydown", getDirection);
 
 document.addEventListener("keydown", getDirection);
 
 function getDirection(event) {
-    if (event.keyCode == 37 && d != "RIGHT") d = "LEFT";
-    if (event.keyCode == 38 && d != "DOWN") d = "UP";
-    if (event.keyCode == 39 && d != "LEFT") d = "RIGHT";
-    if (event.keyCode == 40 && d != "UP") d = "DOWN";
+    if (event.key === 'a' && d != "RIGHT") d = "LEFT";
+    if (event.key === 'w' && d != "DOWN") d = "UP";
+    if (event.key === 'd' && d != "LEFT") d = "RIGHT";
+    if (event.key === 's' && d != "UP") d = "DOWN";
 }
+function setDirection(direction) {
+    if ((direction == "LEFT" && d != "RIGHT") || 
+        (direction == "UP" && d != "DOWN") ||
+        (direction == "RIGHT" && d != "LEFT") ||
+        (direction == "DOWN" && d != "UP")) {
+        d = direction;
+    }
+}
+
+
 
 function createSnake() {
     snake = [];
@@ -32,6 +45,13 @@ function createFood() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Додаємо контури карти
+    ctx.fillStyle = '#333'; // Колір стін
+    ctx.fillRect(0, 0, canvas.width, boxSize);
+    ctx.fillRect(0, canvas.height - boxSize, canvas.width, boxSize);
+    ctx.fillRect(0, 0, boxSize, canvas.height);
+    ctx.fillRect(canvas.width - boxSize, 0, boxSize, canvas.height);
 
     for (let i = 0; i < snake.length; i++) {
         ctx.fillStyle = snakeColor;
@@ -79,7 +99,21 @@ function draw() {
     snake.unshift(newHead);
 }
 
-setInterval(draw, speed);
+function startGame() {
+    if (gameInterval) {
+        clearInterval(gameInterval);
+    }
+    gameInterval = setInterval(draw, speed);
+}
+
+function changeSpeed(newSpeed) {
+    speed = 300 - newSpeed;
+    startGame();
+}
+
+function changeColor(color) {
+    snakeColor = color;
+}
 
 function restartGame() {
     snake = [];
@@ -88,15 +122,9 @@ function restartGame() {
     d = undefined;
     speed = 100;
     document.getElementById('speedRange').value = 100;
-}
-
-function changeSpeed(newSpeed) {
-    speed = 300 - newSpeed;
-}
-
-function changeColor(color) {
-    snakeColor = color;
+    startGame();
 }
 
 createSnake();
 createFood();
+startGame();

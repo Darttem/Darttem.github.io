@@ -1,13 +1,14 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #0099cc; /* синій */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    color: #ff0000; /* червоний */
 }
 #game {
-    background-color: #fff;
+    background-color: #ffcc00; /* жовтий */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -27,13 +28,26 @@ body {
 }
 button {
     padding: 8px 12px;
-    background-color: #333;
-    color: #fff;
+    background-color: #ff0000; /* червоний */
+    color: #0099cc; /* синій */
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 button:hover {
-    background-color: #555;
+    background-color: #d90000;
 }
+#mobile-controls {
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
+    margin-top: 10px;
+}
+
+#mobile-controls button {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+}
+

@@ -5,7 +5,7 @@
      crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <title>Snake Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="game">
@@ -22,6 +22,13 @@
             <button onclick="changeColor('#0000FF')">Синій</button>
         </div>
     </div>
+</div>
+
+<div id="mobile-controls">
+    <button onclick="setDirection('UP')">W</button>
+    <button onclick="setDirection('LEFT')">A</button>
+    <button onclick="setDirection('DOWN')">S</button>
+    <button onclick="setDirection('RIGHT')">D</button>
 </div>
 
 <script src="script.js"></script>
