@@ -10,25 +10,39 @@
 
 <body>
     <div class="container">
-        <h1>Змійка</h1>
-        <canvas id="gameCanvas" width="400" height="400"></canvas>
-
-        <div class="controls">
-            <button onclick="restart()">Рестарт</button>
-            <label>Швидкість: <input type="range" id="speedRange" min="1" max="10" value="5"></label>
-            <span>Колір:</span>
-            <button onclick="changeSnakeColor('red')">Червоний</button>
-            <button onclick="changeSnakeColor('green')">Зелений</button>
-            <button onclick="changeSnakeColor('blue')">Синій</button>
+        <div class="header">
+            <h2>Змійка</h2>
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
         </div>
 
-        <div class="mobile-controls">
-            <button onclick="setDirection('UP')">W</button>
-            <button onclick="setDirection('LEFT')">A</button>
-            <button onclick="setDirection('DOWN')">S</button>
-            <button onclick="setDirection('RIGHT')">D</button>
+        <div class="settings">
+            <div>
+                <strong>Швидкість:</strong><br>
+                <input type="radio" name="speed" value="slow"> Повільна
+                <input type="radio" name="speed" value="medium"> Середня
+                <input type="radio" name="speed" value="fast" checked> Швидка
+            </div>
+            <div>
+                <strong>Колір:</strong><br>
+                <input type="radio" name="color" value="blue"> Синій
+                <input type="radio" name="color" value="red" checked> Червоний
+            </div>
+            <div>
+                <strong>Рахунок:</strong> <span id="score">0</span>
+            </div>
+            <div>
+                <strong>Рекорд:</strong> <span id="record">0</span>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="up">&uarr;</button>
+            <button id="left">&larr;</button>
+            <button id="down">&darr;</button>
+            <button id="right">&rarr;</button>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 
