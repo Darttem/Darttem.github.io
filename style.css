@@ -38,6 +38,10 @@ body {
     grid-template-columns: repeat(3, 50px);
     gap: 0px;
     place-items: center;
+    
+    justify-content: center;
+    
+    
 }
 
 button {
@@ -69,3 +73,4 @@ button {
     grid-column: 3/4;
     grid-row: 2/3;
 }
+
