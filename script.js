@@ -6,6 +6,7 @@ const canvasSize = 20;
 
 let changeLock = false;
 
+let d;
 
 let score = 0;
 let speed = 100; // default speed
@@ -20,7 +21,7 @@ let food = {
   y: Math.floor(Math.random() * canvasSize) * box,
 };
 
-let d;
+
 
 
 
@@ -41,9 +42,35 @@ function restartGame() {
 
 document.addEventListener("keydown", direction);
 
+
+
+function changeDirection(newDirection) {
+    if (newDirection === 'UP' && d !== 'DOWN') d = 'UP';
+    if (newDirection === 'DOWN' && d !== 'UP') d = 'DOWN';
+    if (newDirection === 'LEFT' && d !== 'RIGHT') d = 'LEFT';
+    if (newDirection === 'RIGHT' && d !== 'LEFT') d = 'RIGHT';
+  }
+
+  
+
+  
 function direction(event) {
     if (changeLock) return;
     changeLock = true;
+
+    document.getElementById("left").addEventListener("click", function () {
+        if (d !== "RIGHT") d = "LEFT";
+      });
+      document.getElementById("up").addEventListener("click", function () {
+        if (d !== "DOWN") d = "UP";
+      });
+      document.getElementById("right").addEventListener("click", function () {
+        if (d !== "LEFT") d = "RIGHT";
+      });
+      document.getElementById("down").addEventListener("click", function () {
+        if (d !== "UP") d = "DOWN";
+      });
+      
 
   if (event.key === "ArrowLeft" && d !== "RIGHT") d = "LEFT";
   else if (event.key === "ArrowUp" && d !== "DOWN") d = "UP";
@@ -97,6 +124,8 @@ function updateScore() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    
     
     for (let i = 0; i < snake.length; i++) {
         ctx.fillStyle = i === 0 ? color : 'white';
@@ -115,6 +144,10 @@ function draw() {
     if (d === "UP") snakeY -= box;
     if (d === "RIGHT") snakeX += box;
     if (d === "DOWN") snakeY += box;
+
+
+    
+
 
     // Телепортація
     if (snakeX < 0) snakeX = canvas.width - box;
