@@ -6,6 +6,7 @@ const canvasSize = 20;
 
 let changeLock = false;
 
+let x;
 let d;
 
 let score = 0;
@@ -53,7 +54,7 @@ function changeDirection(newDirection) {
 
   
 
-  
+
 function direction(event) {
     if (changeLock) return;
     changeLock = true;
