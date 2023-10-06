@@ -8,14 +8,16 @@ body {
 }
 
 .container {
-    width: 7000px;
+    width: 1000px;
     border: 1px solid black;
     padding: 20px;
     background-color: #f5f5f5;
+    display: flex;
+    align-items: start; /* вирівнює елементи по верхньому краю */
 }
 
 .settings{
-    justify-content: center;
+    flex: 1; 
     text-align: center;
 
 }
@@ -24,32 +26,38 @@ body {
     justify-content: center;
     text-align: center;
     margin-bottom: 20px;
+    gap: 20px; /* відстань між елементами */
+    
 }
 
 #gameCanvas {
+    flex: 2;
     justify-content: center;
     display: block;
     margin: 20px auto;
     border: 1px solid black;
+    
 }
 
 .settings {
-    justify-content: center;
+    text-align: left;  /* вирівнює текст по лівому краю */
     margin-bottom: 20px;
 }
 
 .settings div {
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
     margin-bottom: 10px;
 }
 
 .controls {
+    justify-content: center;
     display: grid;
     grid-template-columns: repeat(3, 50px);
     gap: 0px;
     place-items: center;
-    
-    justify-content: center;
+    flex: 2;
+    margin-top: 500px;
     
     
 }
@@ -83,4 +91,32 @@ button {
     grid-column: 3/4;
     grid-row: 2/3;
 }
+
+label {
+    display: flex;
+    align-items: center;
+}
+
+label input[type="radio"] {
+    width: 20px;  /* фіксована ширина для радіо-кнопок */
+    margin-right: 10px;  /* додайте відступ з права від радіо-кнопки до тексту */
+}
+
+label span {
+    text-align: left;  /* вирівнює текст по лівому краю */
+}
+
+
+.radio-option {
+
+    align-items: center;  /* це вирівнює елементи по вертикалі */
+    display: inline-block;
+    margin-right: 15px; /* відстань між окремими опціями */
+}
+
+.radio-option input {
+    margin-right: 5px;  /* відстань між радіо-кнопкою і текстом */
+}
+
+
 

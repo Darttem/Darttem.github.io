@@ -15,23 +15,27 @@
     <div class="container">
         <div class="settings">
             <div>
-                <strong>Швидкість:</strong><br>
-                <input type="radio" name="speed" value="slow"> Повільна
-                <input type="radio" name="speed" value="medium"> Середня
-                <input type="radio" name="speed" value="fast" checked> Швидка
+                <div>
+                    <strong>Швидкість:</strong><br>
+                    <label><input type="radio" name="speed" value="slow"><span>Повільна</span></label>
+                    <label><input type="radio" name="speed" value="medium"><span>Середня</span></label>
+                    <label><input type="radio" name="speed" value="fast" checked><span>Швидка</span></label>
+                </div>
+                <div>
+                    <strong>Колір:</strong><br>
+                    <label><input type="radio" name="color" value="blue"><span>Синій</span></label>
+                    <label><input type="radio" name="color" value="green"><span>Зелений</span></label>
+                    <label><input type="radio" name="color" value="red" checked><span>Червоний</span></label>
+                </div>
+                <div>
+                    <strong>Рахунок:</strong> <span id="score">0</span>
+                </div>
+                <div>
+                    <strong>Рекорд:</strong> <span id="record">0</span>
+                </div>
+
             </div>
-            <div>
-                <strong>Колір:</strong><br>
-                <input type="radio" name="color" value="blue"> Синій
-                <input type="radio" name="color" value="green" checked> Зелений
-                <input type="radio" name="color" value="red" checked> Червоний
-            </div>
-            <div>
-                <strong>Рахунок:</strong> <span id="score">0</span>
-            </div>
-            <div>
-                <strong>Рекорд:</strong> <span id="record">0</span>
-            </div>
+            
             
 
 
