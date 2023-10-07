@@ -9,6 +9,11 @@ let changeLock = false;
 let x;
 let d;
 
+
+let highScore = localStorage.getItem("highScore") || 0;
+document.getElementById("record").innerText = highScore;
+
+
 let score = 0;
 let speed = 100; // default speed
 let color = 'red'; // default color
@@ -21,6 +26,16 @@ let food = {
   x: Math.floor(Math.random() * canvasSize) * box,
   y: Math.floor(Math.random() * canvasSize) * box,
 };
+
+
+let bodyTexture = new Image();
+bodyTexture.src = "images/body.jpg";
+
+let headTexture = new Image();
+headTexture.src = "images/head.jpg";
+
+let tailTexture = new Image();
+tailTexture.src = "images/tail.jpg";
 
 
 
@@ -123,11 +138,39 @@ function updateScore() {
     }
 }
 
+bodyTexture.onload = function() {
+    // Якщо потрібно, виконайте який-небудь код тут
+};
+
+headTexture.onload = function() {
+    // Якщо потрібно, виконайте який-небудь код тут
+};
+
+tailTexture.onload = function() {
+    // Якщо потрібно, виконайте який-небудь код тут
+};
+
+
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < snake.length; i++) {
+        if (i == 0) {
+            ctx.drawImage(headTexture, snake[i].x, snake[i].y, box, box);
+        } else if (i == snake.length - 1) {
+            ctx.drawImage(tailTexture, snake[i].x, snake[i].y, box, box);
+        } else {
+            ctx.drawImage(bodyTexture, snake[i].x, snake[i].y, box, box);
+        }
+    }
     
+    
+    highScore = record;
+    localStorage.setItem("highScore", highScore);
+    document.getElementById("record").innerText = highScore;
+
     for (let i = 0; i < snake.length; i++) {
         ctx.fillStyle = i === 0 ? color : 'white';
         ctx.fillRect(snake[i].x, snake[i].y, box, box);
@@ -135,11 +178,17 @@ function draw() {
         ctx.strokeRect(snake[i].x, snake[i].y, box, box);
     }
 
+    
+
     ctx.fillStyle = 'red';
     ctx.fillRect(food.x, food.y, box, box);
 
+    
+
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
+
+    
 
     if (d === "LEFT") snakeX -= box;
     if (d === "UP") snakeY -= box;
@@ -178,12 +227,19 @@ function draw() {
     ) {
         restartGame();
     }
+
+
+    
     
 
     snake.unshift(newHead);
 
+    
+
     updateScore();
     changeLock = false;
+
+    
 
 }
 
